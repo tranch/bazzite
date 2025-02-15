@@ -97,7 +97,8 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         rok/cdemu \
         rodoma92/kde-cdemu-manager \
         rodoma92/rmlint \
-        ilyaz/LACT; \
+        ilyaz/LACT \
+        tulilirockz/fw-fanctrl; \
     do \
         dnf5 -y copr enable $copr; \
         dnf5 -y config-manager setopt copr:copr.fedorainfracloud.org:${copr////:}.priority=98 ;\
@@ -226,6 +227,8 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
         input-remapper \
         i2c-tools \
         lm_sensors \
+        fw-ectool \
+        fw-fanctrl \
         udica \
         ladspa-caps-plugins \
         ladspa-noise-suppression-for-voice \
@@ -464,7 +467,6 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nNoDisplay=true@g' /usr/share/applications/btop.desktop && \
     sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nNoDisplay=true@g' /usr/share/applications/yad-icon-browser.desktop && \
     sed -i 's/#UserspaceHID.*/UserspaceHID=true/' /etc/bluetooth/input.conf && \
-    sed -i "s/^SCX_SCHEDULER=.*/SCX_SCHEDULER=scx_lavd/" /etc/default/scx && \
     rm -f /usr/share/vulkan/icd.d/lvp_icd.*.json && \
     rm -f /usr/lib/systemd/system/service.d/50-keep-warm.conf && \
     mkdir -p "/etc/profile.d/" && \
@@ -541,6 +543,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     systemctl disable brew-upgrade.timer && \
     systemctl disable brew-update.timer && \
     systemctl disable displaylink.service && \
+    systemctl disable fw-fanctrl.service && \
     systemctl enable input-remapper.service && \
     systemctl enable bazzite-flatpak-manager.service && \
     systemctl disable rpm-ostreed-automatic.timer && \
@@ -827,6 +830,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     glib-compile-schemas --strict /tmp/bazzite-schema-test && \
     glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null && \
     rm -r /tmp/bazzite-schema-test && \
+    systemctl disable supergfxd.service && \
     /ctx/image-info && \
     /ctx/build-initramfs && \
     /ctx/finalize
