@@ -349,6 +349,17 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     chmod +x /usr/bin/winetricks && \
     /ctx/cleanup
 
+# Install V2Ray
+RUN --mount=type=cache,dst=/var/cache/libdnf5 \
+    --mount=type=cache,dst=/var/cache/rpm-ostree \
+    --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=tmpfs,dst=/tmp \
+    dnf5 -y install \
+        v2ray-core \
+        v2ray-geoip \
+        v2ray-domain-list-community && \
+    /ctx/cleanup
+
 # Configure KDE & GNOME
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
